@@ -18,87 +18,59 @@ namespace IssueTrackingSystem.Controllers
             return View(model);
         }
 
-        // GET: Space/Cardwall/supportteam
-        public ActionResult Cardwall(string spaceName)
+        // GET: Space/supportteam/Cardwall
+        public ActionResult Cardwall(string spacename)
         {            
-            ViewBag.Space = spaceName;
+            if (spacename.Equals(null) || spacename.Equals(""))
+            {
+                return View("Error");
+            }
+
+            ViewBag.Space = spacename;
             var tickets = _db.tickets
-                .Where(t => t.space.Name == spaceName).ToList();
+                .Where(t => t.space.Name == spacename).ToList();
             return View(tickets);
         }
 
-        // GET: Space/Ticket/8
-        public ActionResult Ticket(string ticketId)
+        // GET: Space/supportteam/Ticket/8
+        public ActionResult Ticket(string spacename, int id)
         {
-            //todo: load ticket details by it's Id 
-            var ticket = Bootstrapper.createTickets(1).Single();
+            var ticket = _db.tickets
+                .Where(t => t.Id == id && t.space.Name == spacename).Single();
             return View(ticket);
         }
 
-        // GET: Space/Create
-        public ActionResult Create()
+        // GET: Space/supportteam/AddTicket
+        public ActionResult AddTicket(string spacename)
         {
             return View();
         }
-
-        // POST: Space/Create
+        
+        // POST: Space/supportteam/AddTicket
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddTicket(string spacename, Ticket ticket)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                ticket.space = _db.spaces
+                .Where(s => s.Name == spacename).First();
 
-                return RedirectToAction("Index");
+                //todo: authentication
+                ticket.CreatedBy = Bootstrapper.AuthenticatedUser;
+
+                try
+                {
+                    _db.tickets.Add(ticket);
+                    _db.SaveChanges();
+                    return RedirectToAction("Cardwall", "Space",  new { spacename = spacename});
+                }
+                catch
+                {
+                    return RedirectToAction("Error"); //todo send caution message
+                }
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Space/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Space/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Space/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Space/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return View(ticket);
         }
 
         protected override void Dispose(bool disposing)

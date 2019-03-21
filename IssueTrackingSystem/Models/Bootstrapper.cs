@@ -7,7 +7,16 @@ namespace IssueTrackingSystem.Models
 {
     public class Bootstrapper
     {
+        private static ITSDatabase _db = new ITSDatabase();
         private static readonly Random getRandom = new Random();
+        public static UserProfile AuthenticatedUser { get; set; }
+
+        public static void authenticateRandomUser()
+        {
+            AuthenticatedUser = _db.users
+                .Where(u => u.Id == getRandom.Next(10))
+                .First();
+        }
 
         public static IEnumerable<Space> createSpaces(int amount)
         {

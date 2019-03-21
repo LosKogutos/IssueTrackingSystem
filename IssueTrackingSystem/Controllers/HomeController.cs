@@ -15,7 +15,9 @@ namespace IssueTrackingSystem.Controllers
         public ActionResult Index()
         {
             //todo: get logged in user from session storage instead of bootstraping him
-            var user = Bootstrapper.createUsers(1).Single();
+            Bootstrapper.authenticateRandomUser();
+
+            var user = Bootstrapper.AuthenticatedUser;
 
             var userTickets =_db.tickets
                 .Include("Space")

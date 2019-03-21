@@ -19,9 +19,21 @@
                 @Html.ActionLink("Issue Tracking System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav" >
-                    <li>@Html.ActionLink("Spaces", "Index", "Space")</li>
-                    <li>@Html.ActionLink("Add Ticket", "AddTicket", "Space")</li>
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("All Spaces ", "Index", "Space")</li>
+                    @{
+                        var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+                        if (controllerName.Equals("Space"))
+                        {
+                            var spacename = this.ViewContext.RouteData.Values["spacename"];
+                            if (spacename != null)
+                            {
+                                var dict = new RouteValueDictionary();
+                                dict.Add("spacename", spacename.ToString());
+                                <li>@Html.ActionLink("Add Ticket", "AddTicket", "Space", dict, null)</li>
+                            }
+                        }
+                    }
                 </ul>
             </div>
         </div>
