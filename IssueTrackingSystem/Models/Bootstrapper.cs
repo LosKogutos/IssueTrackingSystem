@@ -13,8 +13,9 @@ namespace IssueTrackingSystem.Models
 
         public static void authenticateRandomUser()
         {
+            int id = getRandom.Next(10);
             AuthenticatedUser = _db.users
-                .Where(u => u.Id == getRandom.Next(10))
+                .Where(u => u.Id == id)
                 .First();
         }
 

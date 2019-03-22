@@ -8,7 +8,7 @@ namespace IssueTrackingSystem
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~bundles/its").Include(
+            bundles.Add(new ScriptBundle("~/bundles/its").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery-ui-{version},js",
                 "~/Scripts/jquery.unobtrusive*",
@@ -18,7 +18,7 @@ namespace IssueTrackingSystem
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~`/bundles/jqueryui").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

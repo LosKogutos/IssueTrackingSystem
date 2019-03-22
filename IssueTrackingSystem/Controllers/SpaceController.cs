@@ -73,6 +73,16 @@ namespace IssueTrackingSystem.Controllers
             return View(ticket);
         }
 
+        public ActionResult AvailableUsers(string spacename)
+        {
+            //todo: read users with access to this spacename
+            var users = _db.users
+                .Where(u => u.Id == 1 || u.Id == 2)
+                .ToList();
+
+            return Json(users, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (_db != null)
