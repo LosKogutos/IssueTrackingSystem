@@ -35,7 +35,7 @@
         </dt>
 
         <dd id="createdby">
-            @Html.DisplayFor(model => model.CreatedBy)
+            @Html.DisplayFor(model => model.CreatedBy.Email)
         </dd>
 
         @*assigned to*@
@@ -44,7 +44,7 @@
         </dt>
 
         <dd id="assignedto">
-            @Html.DisplayFor(model => model.AssignedTo)
+            @Html.DisplayFor(model => model.AssignedTo.Email)
         </dd>
 
         <dd>
@@ -53,11 +53,14 @@
 
         <dd id="assignedto-input" style="display:none">
             @{
-                dict.Add("fieldname", "status");
+                var dictAssignedTo = new RouteValueDictionary();
+                dictAssignedTo.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+                dictAssignedTo.Add("fieldname", "assignedto");
             }
-            @using (Html.BeginForm("Ticket", "Space", dict, FormMethod.Post, null))
+            @using (Html.BeginForm("Ticket", "Space", dictAssignedTo, FormMethod.Post, null))
             {
-                @Html.EditorFor(model => model.AssignedTo)
+                @*@Html.EditorFor(model => model.AssignedTo)*@
+                @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Email"), "- Please Select -")
                 <input type="submit" value="Update" class="btn btn-default" />
             }
         </dd>
@@ -95,9 +98,11 @@
 
         <dd id="status-input" style="display:none">
             @{
-                dict.Add("fieldname", "status");
+                var dictStatus = new RouteValueDictionary();
+                dictStatus.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+                dictStatus.Add("fieldname", "status");
             }
-            @using (Html.BeginForm("Ticket", "Space", dict, FormMethod.Post, null))
+            @using (Html.BeginForm("Ticket", "Space", dictStatus, FormMethod.Post, null))
             {
                 @Html.EditorFor(model => model.Status)
                 <input type="submit" value="Update" class="btn btn-default" />
@@ -113,25 +118,14 @@
 </p>
 <script>
     function ToggleInputFor(field) {
-        var rest = $('*[id$=input]');
         var element = $('#' + field + '-input');
         var display = element.css("display");
         
         if (display == "none") {
             element.attr("style", "display:inline");
-            rest.each.attr("style", "display:none");
-            @{
-                dict.Remove("fieldname");
-                dict.Add("fieldname", field);
-            }
-
         }
         else if (display == "inline") {
             element.attr("style", "display:none");
-            @{
-                dict.Remove("fieldname");
-            }
         }
-          
     }
 </script>

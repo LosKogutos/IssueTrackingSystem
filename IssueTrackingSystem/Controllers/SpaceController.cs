@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace IssueTrackingSystem.Controllers
 {
@@ -37,8 +38,11 @@ namespace IssueTrackingSystem.Controllers
         public ActionResult Ticket(string spacename, int id)
         {
             var ticket = _db.tickets
+                .Include("CreatedBy").Include("AssignedTo")
                 .Where(t => t.Id == id && t.Space.Name == spacename).Single();
-            return View(Mapper.MapEntityToTicketViewModel(ticket));
+            var ticketViewModel = Mapper.MapEntityToTicketViewModel(ticket);
+            ticketViewModel.Users = _db.users.ToList(); // todo: linq to return only users with access to this spacename
+            return View(ticketViewModel);
         }
 
         // POST: Space/supportteam/Ticket/8?fieldname=status
@@ -53,13 +57,17 @@ namespace IssueTrackingSystem.Controllers
                     ticket.Status = ticketViewModel.Status;
                     break;
                 case "assignedto":
-                    ticket.AssignedTo = ticketViewModel.AssignedTo;
+                    ticket.AssignedTo = _db.users
+                        .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
                     break;
                 default:
                     return View(); //todo: add some error message for user
             }
             _db.SaveChanges();
-            return View(Mapper.MapEntityToTicketViewModel(ticket));
+            var dict = new RouteValueDictionary();
+            dict.Add("spacename", spacename);
+            dict.Add("id", ticket.Id);
+            return RedirectToAction("Ticket", dict);
         }
 
         // GET: Space/supportteam/AddTicket
