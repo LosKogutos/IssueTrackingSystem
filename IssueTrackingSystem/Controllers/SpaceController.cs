@@ -41,6 +41,27 @@ namespace IssueTrackingSystem.Controllers
             return View(Mapper.MapEntityToTicketViewModel(ticket));
         }
 
+        // POST: Space/supportteam/Ticket/8?fieldname=status
+        [HttpPost]
+        public ActionResult Ticket(string spacename, string fieldname, TicketViewModel ticketViewModel)
+        {
+            var ticket = _db.tickets
+                .Where(t => t.Id == ticketViewModel.Id).First();
+            switch (fieldname)
+            {
+                case "status":
+                    ticket.Status = ticketViewModel.Status;
+                    break;
+                case "assignedto":
+                    ticket.AssignedTo = ticketViewModel.AssignedTo;
+                    break;
+                default:
+                    return View(); //todo: add some error message for user
+            }
+            _db.SaveChanges();
+            return View(Mapper.MapEntityToTicketViewModel(ticket));
+        }
+
         // GET: Space/supportteam/AddTicket
         public ActionResult AddTicket(string spacename)
         {

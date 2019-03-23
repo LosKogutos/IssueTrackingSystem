@@ -2,13 +2,16 @@
 
 @{
     ViewBag.Title = "Ticket";
+    var dict = new RouteValueDictionary();
+    dict.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
 }
-
 <h2>Ticket</h2>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
+        
+        @*title*@
         <dt>
             @Html.DisplayNameFor(model => model.Title)
         </dt>
@@ -17,6 +20,7 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
 
+        @*description*@
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -25,6 +29,7 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
+        @*created by*@
         <dt>
             @Html.DisplayNameFor(model => model.CreatedBy)
         </dt>
@@ -33,6 +38,7 @@
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
 
+        @*assigned to*@
         <dt>
             @Html.DisplayNameFor(model => model.AssignedTo)
         </dt>
@@ -41,6 +47,22 @@
             @Html.DisplayFor(model => model.AssignedTo)
         </dd>
 
+        <dd>
+            <input id="assignedto-edit" onclick="ToggleInputFor('assignedto')" type="button" value="Edit" />
+        </dd>
+
+        <dd id="assignedto-input" style="display:none">
+            @{
+                dict.Add("fieldname", "status");
+            }
+            @using (Html.BeginForm("Ticket", "Space", dict, FormMethod.Post, null))
+            {
+                @Html.EditorFor(model => model.AssignedTo)
+                <input type="submit" value="Update" class="btn btn-default" />
+            }
+        </dd>
+
+        @*eta*@
         <dt>
             @Html.DisplayNameFor(model => model.Eta)
         </dt>
@@ -49,6 +71,7 @@
             @Html.DisplayFor(model => model.Eta)
         </dd>
 
+        @*created date*@
         <dt>
             @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
@@ -57,26 +80,58 @@
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
+        @* status *@
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
 
-        <dd id="title">
+        <dd id="status">
             @Html.DisplayFor(model => model.Status)
         </dd>
 
         <dd>
-            @*<div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Update" class="btn btn-default" />
-                </div>
-            </div>*@
+            <input id="status-edit" onclick="ToggleInputFor('status')" type="button" value="Edit" />
+        </dd>
+
+        <dd id="status-input" style="display:none">
+            @{
+                dict.Add("fieldname", "status");
+            }
+            @using (Html.BeginForm("Ticket", "Space", dict, FormMethod.Post, null))
+            {
+                @Html.EditorFor(model => model.Status)
+                <input type="submit" value="Update" class="btn btn-default" />
+            }
         </dd>
     </dl>
 </div>
 <p>
-    @{var dict = new RouteValueDictionary();
-        dict.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
-        Html.ActionLink("Back to List", "Cardwall", "Space", dict, null);
+    @{var dictionary = new RouteValueDictionary();
+        dictionary.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+        Html.ActionLink("Back to List", "Cardwall", "Space", dictionary, null);
     }
 </p>
+<script>
+    function ToggleInputFor(field) {
+        var rest = $('*[id$=input]');
+        var element = $('#' + field + '-input');
+        var display = element.css("display");
+        
+        if (display == "none") {
+            element.attr("style", "display:inline");
+            rest.each.attr("style", "display:none");
+            @{
+                dict.Remove("fieldname");
+                dict.Add("fieldname", field);
+            }
+
+        }
+        else if (display == "inline") {
+            element.attr("style", "display:none");
+            @{
+                dict.Remove("fieldname");
+            }
+        }
+          
+    }
+</script>
