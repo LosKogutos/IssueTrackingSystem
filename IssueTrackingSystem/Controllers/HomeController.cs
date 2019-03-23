@@ -26,12 +26,12 @@ namespace IssueTrackingSystem.Controllers
 
             var spaces = userTickets
                 .Distinct()
-                .Select(t => t.space).ToList();            
+                .Select(t => t.Space).ToList();            
 
             foreach(Space space in spaces)
             {
                 space.Tickets = userTickets
-                    .Where(t => t.space.Id == space.Id)
+                    .Where(t => t.Space.Id == space.Id)
                     .ToList();
             }
 

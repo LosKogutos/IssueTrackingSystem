@@ -1,4 +1,5 @@
 ﻿using IssueTrackingSystem.Models;
+using IssueTrackingSystem.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace IssueTrackingSystem.Controllers
 
             ViewBag.Space = spacename;
             var tickets = _db.tickets
-                .Where(t => t.space.Name == spacename).ToList();
+                .Where(t => t.Space.Name == spacename).ToList();
             return View(tickets);
         }
 
@@ -36,52 +37,50 @@ namespace IssueTrackingSystem.Controllers
         public ActionResult Ticket(string spacename, int id)
         {
             var ticket = _db.tickets
-                .Where(t => t.Id == id && t.space.Name == spacename).Single();
-            return View(ticket);
+                .Where(t => t.Id == id && t.Space.Name == spacename).Single();
+            return View(Mapper.MapEntityToTicketViewModel(ticket));
         }
 
         // GET: Space/supportteam/AddTicket
         public ActionResult AddTicket(string spacename)
         {
-            return View();
+            var tvm = new TicketViewModel
+            {
+                Users = _db.users.ToList() // todo: linq to return only users with access to this spacename
+            };
+            return View(tvm);
         }
         
         // POST: Space/supportteam/AddTicket
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTicket(string spacename, Ticket ticket)
+        public ActionResult AddTicket(string spacename, TicketViewModel ticketViewModel)
         {
             if (ModelState.IsValid)
             {
-                ticket.space = _db.spaces
-                .Where(s => s.Name == spacename).First();
-
+                ticketViewModel.Space = _db.spaces
+                    .Where(s => s.Name == spacename).First();
+                ticketViewModel.AssignedTo = _db.users
+                    .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
                 //todo: authentication
-                ticket.CreatedBy = Bootstrapper.AuthenticatedUser;
+                ticketViewModel.CreatedBy = Bootstrapper.AuthenticatedUser;
+                ticketViewModel.CreatedDate = DateTime.Now;
+                var ticketEntity = Mapper.MapTicketViewModelToEntity(ticketViewModel);
 
                 try
                 {
-                    _db.tickets.Add(ticket);
+                    _db.tickets.Add(ticketEntity);
                     _db.SaveChanges();
                     return RedirectToAction("Cardwall", "Space",  new { spacename = spacename});
                 }
-                catch
+                catch (Exception e)
                 {
                     return RedirectToAction("Error"); //todo send caution message
                 }
             }
-            return View(ticket);
+            return View(ticketViewModel);
         }
 
-        public ActionResult AvailableUsers(string spacename)
-        {
-            //todo: read users with access to this spacename
-            var users = _db.users
-                .Where(u => u.Id == 1 || u.Id == 2)
-                .ToList();
-
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
 
         protected override void Dispose(bool disposing)
         {

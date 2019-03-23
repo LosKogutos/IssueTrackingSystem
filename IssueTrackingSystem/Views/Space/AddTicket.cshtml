@@ -1,4 +1,4 @@
-﻿@model IssueTrackingSystem.Models.Ticket
+﻿@model IssueTrackingSystem.Models.TicketViewModel
 
 @{
     ViewBag.Title = "AddTicket";
@@ -50,10 +50,7 @@
     <div class="form=group">
         @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(
-                model => model.AssignedTo, Enumerable.Empty<SelectListItem>(),
-                "-- Loading --",
-                new { id = "availableUsers" })
+            @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Email"), "- Please Select -")
             @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
         </div>
     </div>

@@ -27,7 +27,7 @@
                         @{ 
                             var dict = new RouteValueDictionary();
                             dict.Add("id", ticket.Id);
-                            dict.Add("spacename", ticket.space.Name);
+                            dict.Add("spacename", ticket.Space.Name);
                         }
                         <td>@Html.ActionLink("Details", "Ticket", "Space", dict, null)</td>
                     </tr>

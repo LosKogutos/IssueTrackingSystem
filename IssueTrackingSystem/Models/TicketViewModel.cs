@@ -6,7 +6,7 @@ using System.Web;
 
 namespace IssueTrackingSystem.Models
 {
-    public enum Status
+    public enum StatusTicketViewModel
     {
         Backlog,
         CurrentlyWorkingOn,
@@ -14,18 +14,22 @@ namespace IssueTrackingSystem.Models
         Completed
     }
 
-    public class Ticket
+    public class TicketViewModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public Status Status { get; set; }
         public string Description { get; set; }
         public UserProfile CreatedBy { get; set; }
-        public UserProfile AssignedTo { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ?Eta { get; set; }
+        public DateTime? Eta { get; set; }
         public DateTime CreatedDate { get; set; }
         public Space Space { get; set; }
+
+        public UserProfile AssignedTo { get; set; }
+        public int SelectedAssignedTo { get; set; }
+        public List<UserProfile> Users { get; set; }
+
     }
 }

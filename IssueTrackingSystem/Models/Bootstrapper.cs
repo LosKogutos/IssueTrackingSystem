@@ -9,7 +9,21 @@ namespace IssueTrackingSystem.Models
     {
         private static ITSDatabase _db = new ITSDatabase();
         private static readonly Random getRandom = new Random();
-        public static UserProfile AuthenticatedUser { get; set; }
+        private static UserProfile _authUser;
+        public static UserProfile AuthenticatedUser
+        {
+            get
+            {
+                if (_authUser != null)
+                    return _authUser;
+
+                else authenticateRandomUser();
+                return _authUser;
+            }
+            set {
+                _authUser = value;
+            }
+        }
 
         public static void authenticateRandomUser()
         {
@@ -27,7 +41,7 @@ namespace IssueTrackingSystem.Models
                 spaceList.Add(new Space
                 {
                     Id = i+1,
-                    Name = "space" + (i+1)
+                    Name = "Space" + (i+1)
                 });
             }
             return spaceList;
@@ -80,10 +94,10 @@ namespace IssueTrackingSystem.Models
                     Description = "description" + (i + 1),
                     CreatedDate = DateTime.Now,
                     Eta = DateTime.Now,
-                    space = new Space
+                    Space = new Space
                     {
                         Id = (i + 1),
-                        Name = "space" + (i + 1),
+                        Name = "Space" + (i + 1),
                     },
                     AssignedTo = new UserProfile
                     {
@@ -113,7 +127,7 @@ namespace IssueTrackingSystem.Models
                 spaceList.Add(new Space
                 {
                     Id = i + 1,
-                    Name = "space" + (i + 1),
+                    Name = "Space" + (i + 1),
                     Tickets = tickets.Skip(i).Take(2).ToList()
                 });
             }

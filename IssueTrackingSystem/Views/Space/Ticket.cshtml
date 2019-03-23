@@ -1,4 +1,4 @@
-﻿@model IssueTrackingSystem.Models.Ticket
+﻿@model IssueTrackingSystem.Models.TicketViewModel
 
 @{
     ViewBag.Title = "Ticket";
@@ -13,7 +13,7 @@
             @Html.DisplayNameFor(model => model.Title)
         </dt>
 
-        <dd>
+        <dd id="title">
             @Html.DisplayFor(model => model.Title)
         </dd>
 
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.Description)
         </dt>
 
-        <dd>
+        <dd id="descirption">
             @Html.DisplayFor(model => model.Description)
         </dd>
 
@@ -29,7 +29,7 @@
             @Html.DisplayNameFor(model => model.CreatedBy)
         </dt>
 
-        <dd>
+        <dd id="createdby">
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
 
@@ -37,7 +37,7 @@
             @Html.DisplayNameFor(model => model.AssignedTo)
         </dt>
 
-        <dd>
+        <dd id="assignedto">
             @Html.DisplayFor(model => model.AssignedTo)
         </dd>
 
@@ -45,7 +45,7 @@
             @Html.DisplayNameFor(model => model.Eta)
         </dt>
 
-        <dd>
+        <dd id="eta">
             @Html.DisplayFor(model => model.Eta)
         </dd>
 
@@ -53,13 +53,30 @@
             @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
 
-        <dd>
+        <dd id="createddate">
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd id="title">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dd>
+            @*<div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-default" />
+                </div>
+            </div>*@
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @{var dict = new RouteValueDictionary();
+        dict.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+        Html.ActionLink("Back to List", "Cardwall", "Space", dict, null);
+    }
 </p>
