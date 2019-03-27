@@ -15,9 +15,13 @@ namespace IssueTrackingSystem.Controllers
         // GET: Space
         public ActionResult Index()
         {
-            //todo: load spaces available for user 
-            var model = _db.spaces.ToList();
-            return View(model);
+            var spaces = _db.spaces
+                .Where(s => 
+                    s.Users.Any(u =>
+                        u.Id == WebSecurity.CurrentUserId))
+                .ToList();
+                
+            return View(spaces);
         }
 
         // GET: Space/supportteam/Cardwall
@@ -41,7 +45,13 @@ namespace IssueTrackingSystem.Controllers
                 .Include("CreatedBy").Include("AssignedTo")
                 .Where(t => t.Id == id && t.Space.Name == spacename).Single();
             var ticketViewModel = Mapper.MapEntityToTicketViewModel(ticket);
-            ticketViewModel.Users = _db.users.ToList(); // todo: linq to return only users with access to this spacename
+
+            ticketViewModel.Users = _db.users
+                .Where(u =>
+                    u.Spaces.Any(s =>
+                        s.Name == spacename))
+                .ToList();
+
             return View(ticketViewModel);
         }
 
@@ -76,7 +86,11 @@ namespace IssueTrackingSystem.Controllers
         {
             var tvm = new TicketViewModel
             {
-                Users = _db.users.ToList() // todo: linq to return only users with access to this spacename
+                Users = _db.users
+                    .Where(u =>
+                        u.Spaces.Any(s =>
+                            s.Name == spacename))
+                    .ToList()
             };
             return View(tvm);
         }
