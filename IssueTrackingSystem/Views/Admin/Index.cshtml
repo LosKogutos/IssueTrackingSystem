@@ -1,0 +1,46 @@
+﻿@model IEnumerable<IssueTrackingSystem.Models.Space>
+
+@{
+    ViewBag.Title = "List of Spaces";
+}
+<br/>
+<p>
+    <input id="create-user" onclick="Render('user')" type="button" value="Create New User"/>
+</p>
+<p>
+    <input id="create-space" onclick="Render('space')" type="button" value="Create New Space" />
+</p>
+<div id="creatediv">
+
+</div>
+
+
+<h2>List of Spaces</h2>
+<table class="table">
+    
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "ManageSpace", new { id=item.Id }) 
+        </td>
+    </tr>
+}
+</table>
+<script>
+    function Render(field) {
+        if (field == 'user') {
+            $.get('@Url.Action("CreateUser")', function (data) {
+                $('#creatediv').html(data);
+                count++;
+            });
+        } else if (field == 'space') {
+            $.get('@Url.Action("CreateSpace")', function (data) {
+                $('#creatediv').html(data);
+            });
+        }
+    }
+</script>

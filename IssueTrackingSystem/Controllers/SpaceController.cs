@@ -71,7 +71,7 @@ namespace IssueTrackingSystem.Controllers
                         .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
                     break;
                 default:
-                    return View(); //todo: add some error message for user
+                    return View("Error"); 
             }
             _db.SaveChanges();
             var dict = new RouteValueDictionary
@@ -120,7 +120,7 @@ namespace IssueTrackingSystem.Controllers
                 }
                 catch 
                 {
-                    return RedirectToAction("Error"); //todo send caution message
+                    return RedirectToAction("Error"); 
                 }
             }
             return View(ticketViewModel);
