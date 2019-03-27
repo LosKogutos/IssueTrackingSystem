@@ -18,6 +18,6 @@ namespace IssueTrackingSystem.Models
         public string Name { get; set; }
         public string Lastname { get; set; }
         public IEnumerable<Ticket> Tickets { get; set; }
-
+        public virtual ICollection<Space> Spaces { get; set; } 
     }
 }

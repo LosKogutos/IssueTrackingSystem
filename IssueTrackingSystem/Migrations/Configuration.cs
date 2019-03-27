@@ -8,7 +8,7 @@ namespace IssueTrackingSystem.Migrations
     using Models;
     using WebMatrix.WebData;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<IssueTrackingSystem.Models.ITSDatabase>
+    internal sealed class Configuration : DbMigrationsConfiguration<ITSDatabase>
     {
         public Configuration()
         {
@@ -16,8 +16,9 @@ namespace IssueTrackingSystem.Migrations
             ContextKey = "IssueTrackingSystem.Models.ITSDatabase";
         }
 
-        protected override void Seed(IssueTrackingSystem.Models.ITSDatabase context)
+        protected override void Seed(ITSDatabase context)
         {
+            
             SeedMembership();
             context.tickets.AddOrUpdate(t => t.Id, Bootstrapper.createReadyTicket(10).ToArray());
         }

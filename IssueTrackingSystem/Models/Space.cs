@@ -14,5 +14,6 @@ namespace IssueTrackingSystem.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public IEnumerable<Ticket> Tickets { get; set; }
+        public virtual ICollection<UserProfile> Users { get; set; }
     }
 }
