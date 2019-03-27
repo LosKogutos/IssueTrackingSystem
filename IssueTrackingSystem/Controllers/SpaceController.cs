@@ -1,14 +1,14 @@
 ﻿using IssueTrackingSystem.Models;
 using IssueTrackingSystem.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using WebMatrix.WebData;
 
 namespace IssueTrackingSystem.Controllers
 {
+    [Authorize]
     public class SpaceController : Controller
     {
         private ITSDatabase _db = new ITSDatabase();
@@ -64,10 +64,11 @@ namespace IssueTrackingSystem.Controllers
                     return View(); //todo: add some error message for user
             }
             _db.SaveChanges();
-            var dict = new RouteValueDictionary();
-            dict.Add("spacename", spacename);
-            dict.Add("id", ticket.Id);
-            return RedirectToAction("Ticket", dict);
+            var dict = new RouteValueDictionary
+            {
+                { "spacename", spacename }
+            };
+            return RedirectToAction("Cardwall", dict);
         }
 
         // GET: Space/supportteam/AddTicket
@@ -91,9 +92,10 @@ namespace IssueTrackingSystem.Controllers
                     .Where(s => s.Name == spacename).First();
                 ticketViewModel.AssignedTo = _db.users
                     .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
-                //todo: authentication
-                ticketViewModel.CreatedBy = Bootstrapper.AuthenticatedUser;
+                ticketViewModel.CreatedBy = _db.users
+                    .Where(u => u.Id == WebSecurity.CurrentUserId).SingleOrDefault();
                 ticketViewModel.CreatedDate = DateTime.Now;
+
                 var ticketEntity = Mapper.MapTicketViewModelToEntity(ticketViewModel);
 
                 try
@@ -102,7 +104,7 @@ namespace IssueTrackingSystem.Controllers
                     _db.SaveChanges();
                     return RedirectToAction("Cardwall", "Space",  new { spacename = spacename});
                 }
-                catch (Exception e)
+                catch 
                 {
                     return RedirectToAction("Error"); //todo send caution message
                 }

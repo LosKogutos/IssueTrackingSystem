@@ -33,6 +33,10 @@
                                 <li>@Html.ActionLink("Add Ticket", "AddTicket", "Space", dict, null)</li>
                             }
                         }
+                        if (HttpContext.Current.Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+                        }
                     }
                 </ul>
             </div>

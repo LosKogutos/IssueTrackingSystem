@@ -1,12 +1,12 @@
 ﻿using IssueTrackingSystem.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using WebMatrix.WebData;
+
 
 namespace IssueTrackingSystem.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         //todo: add DI/IC container for dbContext 
@@ -14,14 +14,9 @@ namespace IssueTrackingSystem.Controllers
 
         public ActionResult Index()
         {
-            //todo: get logged in user from session storage instead of bootstraping him
-            Bootstrapper.authenticateRandomUser();
-
-            var user = Bootstrapper.AuthenticatedUser;
-
             var userTickets =_db.tickets
                 .Include("Space")
-                .Where(t => t.AssignedTo.Id == user.Id && t.Status != Status.Completed)
+                .Where(t => t.AssignedTo.Id == WebSecurity.CurrentUserId && t.Status != Status.Completed)
                 .ToList();
 
             var spaces = userTickets
