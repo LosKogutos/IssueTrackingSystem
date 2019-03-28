@@ -152,7 +152,7 @@ namespace IssueTrackingSystem.Controllers
             {
                 _db.spaces.Add(space);
                 _db.SaveChanges();
-                return View("Index");
+                return RedirectToAction("Index");
             }
             catch
             {
