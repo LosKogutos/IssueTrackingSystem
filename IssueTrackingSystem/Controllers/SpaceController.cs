@@ -34,6 +34,7 @@ namespace IssueTrackingSystem.Controllers
 
             ViewBag.Space = spacename;
             var tickets = _db.tickets
+                .Include("CreatedBy").Include("AssignedTo")
                 .Where(t => t.Space.Name == spacename).ToList();
             return View(tickets);
         }
@@ -92,6 +93,8 @@ namespace IssueTrackingSystem.Controllers
                             s.Name == spacename))
                     .ToList()
             };
+
+            ViewBag.Spacename = spacename;
             return View(tvm);
         }
         

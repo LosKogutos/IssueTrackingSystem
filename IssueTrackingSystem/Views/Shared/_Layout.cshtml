@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IssueTrackingSystem Home </title>
+    <title>ITS</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -16,11 +16,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Issue Tracking System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("ITS Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("All Spaces ", "Index", "Space")</li>
+                    <li>@Html.ActionLink("All My Spaces ", "Index", "Space")</li>
                     @{
                         var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
                         if (controllerName.Equals("Space"))
@@ -33,12 +33,20 @@
                                 <li>@Html.ActionLink("Add Ticket", "AddTicket", "Space", dict, null)</li>
                             }
                         }
-                        if (HttpContext.Current.Request.IsAuthenticated)
-                        {
-                            <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
-                        }
                     }
                 </ul>
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
+                                }
+                            <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+                        </ul>
+                    }
+                }
             </div>
         </div>
     </div>

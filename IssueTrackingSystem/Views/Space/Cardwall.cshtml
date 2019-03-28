@@ -40,10 +40,10 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
+            @Html.DisplayFor(modelItem => item.CreatedBy.Username)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.AssignedTo)
+            @Html.DisplayFor(modelItem => item.AssignedTo.Username)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Eta)

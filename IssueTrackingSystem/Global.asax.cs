@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 using WebMatrix.WebData;
 
 namespace IssueTrackingSystem
@@ -20,7 +21,28 @@ namespace IssueTrackingSystem
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            Seed();
 
+        }
+
+        private void Seed()
+        {
+
+            var roles = (SimpleRoleProvider)Roles.Provider;
+            var membership = (SimpleMembershipProvider)Membership.Provider;
+
+            if (!roles.RoleExists("Admin"))
+            {
+                roles.CreateRole("Admin");
+            }
+            if (membership.GetUser("mkogut", false) == null)
+            {
+                membership.CreateUserAndAccount("mkogut", "qwerty");
+            }
+            if (!roles.GetRolesForUser("mkogut").Contains("Admin"))
+            {
+                roles.AddUsersToRoles(new[] { "mkogut" }, new[] { "admin" });
+            }
         }
     }
 }

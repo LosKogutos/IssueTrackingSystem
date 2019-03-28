@@ -5,7 +5,7 @@
     var dict = new RouteValueDictionary();
     dict.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
 }
-<h2>Ticket</h2>
+<h2>Ticket # @Html.DisplayFor(moodel => Model.Id)</h2>
 
 <div>
     <hr />
@@ -35,7 +35,7 @@
         </dt>
 
         <dd id="createdby">
-            @Html.DisplayFor(model => model.CreatedBy.Email)
+            @Html.DisplayFor(model => model.CreatedBy.Username)
         </dd>
 
         @*assigned to*@
@@ -44,7 +44,7 @@
         </dt>
 
         <dd id="assignedto">
-            @Html.DisplayFor(model => model.AssignedTo.Email)
+            @Html.DisplayFor(model => model.AssignedTo.Username)
         </dd>
 
         <dd>
@@ -60,7 +60,7 @@
             @using (Html.BeginForm("Ticket", "Space", dictAssignedTo, FormMethod.Post, null))
             {
                 @*@Html.EditorFor(model => model.AssignedTo)*@
-                @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Email"), "- Please Select -")
+                @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Username"), "- Please Select -")
                 <input type="submit" value="Update" class="btn btn-default" />
             }
         </dd>

@@ -20,7 +20,7 @@ namespace IssueTrackingSystem.Migrations
         {
             
             SeedMembership();
-            context.tickets.AddOrUpdate(t => t.Id, Bootstrapper.createReadyTicket(10).ToArray());
+            //context.tickets.AddOrUpdate(t => t.Id, Bootstrapper.createReadyTicket(10).ToArray());
         }
 
         private void SeedMembership()
