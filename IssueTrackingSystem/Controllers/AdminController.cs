@@ -91,16 +91,16 @@ namespace IssueTrackingSystem.Controllers
         public ActionResult AddAccessForUser(int id, string spacename)
         {
             var space = _db.spaces
-                .Where(s => s.Name == spacename).SingleOrDefault();
+                .Where(s => s.Name == spacename).First();
             var user = _db.users
-                .Where(u => u.Id == id).SingleOrDefault();
+                .Where(u => u.Id == id).First();
 
             space.Users.Add(user);
             user.Spaces.Add(space);
             try
             {
                 _db.SaveChanges();
-                return View("ManageSpace", new { id = space.Id });
+                return RedirectToAction("ManageSpace", new { id = space.Id });
             }
             catch
             {
