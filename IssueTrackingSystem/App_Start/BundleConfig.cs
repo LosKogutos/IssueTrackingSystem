@@ -12,8 +12,8 @@ namespace IssueTrackingSystem
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery-ui-{version},js",
                 "~/Scripts/jquery.unobtrusive*",
-                "~/Scripts/jquery.valudate*",
-                "~/Scripts/bootstrap.js"));
+                "~/Scripts/jquery.validate*",
+                "~/Scripts/bootstrap*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
@@ -33,7 +33,7 @@ namespace IssueTrackingSystem
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap*",
                       "~/Content/site.css",
                       "~/Content/jquery-ui*"));
         }

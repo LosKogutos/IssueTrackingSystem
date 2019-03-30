@@ -30,6 +30,7 @@ namespace IssueTrackingSystem.Models
         public UserProfile AssignedTo { get; set; }
         public int SelectedAssignedTo { get; set; }
         public List<UserProfile> Users { get; set; }
+        public List<Comment> Comments { get; set; }
 
     }
 }

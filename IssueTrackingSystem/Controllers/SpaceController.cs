@@ -43,7 +43,7 @@ namespace IssueTrackingSystem.Controllers
         public ActionResult Ticket(string spacename, int id)
         {
             var ticket = _db.tickets
-                .Include("CreatedBy").Include("AssignedTo")
+                .Include("CreatedBy").Include("AssignedTo").Include("Comments")
                 .Where(t => t.Id == id && t.Space.Name == spacename).Single();
             var ticketViewModel = Mapper.MapEntityToTicketViewModel(ticket);
 
@@ -129,6 +129,22 @@ namespace IssueTrackingSystem.Controllers
             return View(ticketViewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddComment(CommentViewModel commentViewModel)
+        {
+            //save ticket to database 
+            Comment comment = Mapper.MapCommentViewModelToEntity(commentViewModel);
+            comment.CreatedBy = _db.users
+                    .Where(u => u.Id == WebSecurity.CurrentUserId).SingleOrDefault();
+            comment.Ticket = _db.tickets
+                    .Where(t => t.Id == commentViewModel.TicketId && t.Space.Name == commentViewModel.Spacename).SingleOrDefault();
+
+            _db.Comments.Add(comment);
+            _db.SaveChanges();
+
+            return RedirectToAction("Ticket", new { spacename = commentViewModel.Spacename, id = commentViewModel.TicketId });
+        }
 
         protected override void Dispose(bool disposing)
         {

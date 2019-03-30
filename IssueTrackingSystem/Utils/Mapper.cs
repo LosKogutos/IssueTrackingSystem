@@ -36,7 +36,17 @@ namespace IssueTrackingSystem.Utils
                 CreatedBy = entity.CreatedBy,
                 CreatedDate = entity.CreatedDate,
                 Eta = entity.Eta,
-                Status = entity.Status
+                Status = entity.Status,
+                Comments = entity.Comments.ToList()
+            };
+        }
+
+        internal static Comment MapCommentViewModelToEntity(CommentViewModel commentViewModel)
+        {
+            return new Comment
+            {
+                Text = commentViewModel.Text,
+                CreatedDate = DateTime.Now
             };
         }
     }

@@ -40,9 +40,9 @@
                     {
                         <ul class="nav navbar-nav navbar-right">
                             @if (User.IsInRole("Admin"))
-                                {
-                                    <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
-                                }
+                            {
+                                <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
+                            }
                             <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
                         </ul>
                     }
@@ -52,11 +52,10 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - IssueTrackingSystem</p>
-        </footer>
     </div>
+    <footer class="">
+        <p class="text-center">&copy; @DateTime.Now.Year - IssueTrackingSystem</p>
+    </footer>
 
     @Scripts.Render("~/bundles/its")
     @RenderSection("scripts", required: false)

@@ -17,7 +17,9 @@ namespace IssueTrackingSystem.Models
         public string Email { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
-        public IEnumerable<Ticket> Tickets { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Space> Spaces { get; set; } 
+        public virtual ICollection<Comment> Comments { get; set; }
+
     }
 }

@@ -17,6 +17,6 @@ namespace IssueTrackingSystem.Models
         public DbSet<Space> spaces { get; set; }
         public DbSet<Ticket> tickets { get; set; }
         public DbSet<UserProfile> users { get; set; }
-
+        public DbSet<Comment> Comments { get; set; }
     }
 }

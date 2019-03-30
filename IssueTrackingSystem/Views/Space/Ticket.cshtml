@@ -1,4 +1,5 @@
-﻿@model IssueTrackingSystem.Models.TicketViewModel
+﻿@using IssueTrackingSystem.Models
+@model TicketViewModel
 
 @{
     ViewBag.Title = "Ticket";
@@ -7,28 +8,9 @@
 }
 <h2>Ticket # @Html.DisplayFor(moodel => Model.Id)</h2>
 
-<div>
+<div class="col-md-3 text-left">
     <hr />
     <dl class="dl-horizontal">
-        
-        @*title*@
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd id="title">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        @*description*@
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd id="descirption">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
         @*created by*@
         <dt>
             @Html.DisplayNameFor(model => model.CreatedBy)
@@ -109,13 +91,55 @@
             }
         </dd>
     </dl>
+    <p>
+        @{var dictionary = new RouteValueDictionary();
+            dictionary.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+        }
+        @Html.ActionLink("Back", "Cardwall", "Space", dictionary, null);
+    </p>
 </div>
-<p>
-    @{var dictionary = new RouteValueDictionary();
-        dictionary.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
-        Html.ActionLink("Back to List", "Cardwall", "Space", dictionary, null);
-    }
-</p>
+<div class="col-md-9 text-center">
+    <dl class="dl-horizontal">
+        @*title*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd id="title">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        @*description*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd id="descirption">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+    <div id="commentsSection">
+        <h2>Comments Section</h2>
+        @foreach(var comment in Model.Comments)
+        {
+            <div id="comment">
+                @comment.CreatedBy.Username
+                @comment.CreatedDate
+                @Html.Label("commentText", comment.Text)
+            </div>
+        }
+        <div id="newComment">
+            @{ 
+                var viewmodel = new CommentViewModel
+                {
+                    Spacename = this.ViewContext.RouteData.Values["spacename"].ToString(),
+                    TicketId = Model.Id
+                };
+            }
+            @Html.Partial("_AddComment", viewmodel)
+        </div>
+    </div>
+</div>
 <script>
     function ToggleInputFor(field) {
         var element = $('#' + field + '-input');
