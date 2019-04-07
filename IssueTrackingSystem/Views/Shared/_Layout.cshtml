@@ -6,6 +6,8 @@
     <title>ITS</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("Cardwall", false)
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -58,6 +60,6 @@
     </footer>
 
     @Scripts.Render("~/bundles/its")
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", false)
 </body>
 </html>

@@ -1,63 +1,132 @@
-﻿@model IEnumerable<IssueTrackingSystem.Models.Ticket>
+﻿@using IssueTrackingSystem.Models
+@model IEnumerable<IssueTrackingSystem.Models.Ticket>
 
 @{
     ViewBag.Title = "Cardwall";
 }
 
-<h2>@ViewBag.Space </h2>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AssignedTo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Eta)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy.Username)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssignedTo.Username)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Eta)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Ticket", "Space", new { id = item.Id}, null)
-        </td>
-    </tr>
+@section Cardwall {
+    <link href="@Href("~/Content/cardwall")" rel="stylesheet" type="text/css" />
 }
 
-</table>
+<h2> Cardwall of @ViewBag.Space </h2>
+
+
+<div id="Cardwall">
+
+    <div id="Containers" class="table-responsive">
+        <table id="headers" class="table">
+            <thead>
+                <tr>
+                    <th class="col-lg-3" style="background-color:#ccdfff">BACKLOG</th>
+                    <th class="col-lg-3" style="background-color:#96bdff">CURRENTLY WORKING ON</th>
+                    <th class="col-lg-3" style="background-color:#68a0ff">TEST</th>
+                    <th class="col-lg-3" style="background-color:#2676ff">COMPLETED</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="Backlog" class="col-lg-3">
+            @foreach (var item in Model)
+            {
+                if (item.Status == Status.Backlog)
+                {
+                    <div id="@item.Id" class="panel panel-primary">
+                        <div class="panel-heading">
+                            Ticket # @Html.DisplayFor(modelItem => item.Id)
+                        </div>
+                        <div class="panel-body">
+                            Title: <b>@Html.DisplayFor(modelItem => item.Title) </b><br />
+                            Assigned To: <b>@Html.DisplayFor(modelItem => item.AssignedTo.Username) </b><br />
+                            <b>@Html.ActionLink("Details", "Ticket", "Space", new { id = item.Id, spacename = ViewBag.Space }, null)</b>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div id="CurrentlyWorkingOn" class="col-lg-3">
+            @foreach (var item in Model)
+            {
+                if (item.Status == Status.CurrentlyWorkingOn)
+                {
+                    <div id="@item.Id" class="panel panel-primary">
+                        <div class="panel-heading">
+                            Ticket # @Html.DisplayFor(modelItem => item.Id)
+                        </div>
+                        <div class="panel-body">
+                            Title: <b>@Html.DisplayFor(modelItem => item.Title) </b><br />
+                            Assigned To: <b>@Html.DisplayFor(modelItem => item.AssignedTo.Username) </b><br />
+                            <b>@Html.ActionLink("Details", "Ticket", "Space", new { id = item.Id, spacename = ViewBag.Space }, null)</b>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div id="Test" class="col-lg-3">
+            @foreach (var item in Model)
+            {
+                if (item.Status == Status.Test)
+                {
+                    <div id="@item.Id" class="panel panel-primary">
+                        <div class="panel-heading">
+                            Ticket # @Html.DisplayFor(modelItem => item.Id)
+                        </div>
+                        <div class="panel-body">
+                            Title: <b>@Html.DisplayFor(modelItem => item.Title) </b><br />
+                            Assigned To: <b>@Html.DisplayFor(modelItem => item.AssignedTo.Username) </b><br />
+                            <b>@Html.ActionLink("Details", "Ticket", "Space", new { id = item.Id, spacename = ViewBag.Space }, null)</b>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div id="Completed" class="col-lg-3">
+            @foreach (var item in Model)
+            {
+                if (item.Status == Status.Completed)
+                {
+                    <div id="@item.Id" class="panel panel-primary">
+                        <div class="panel-heading">
+                            Ticket # @Html.DisplayFor(modelItem => item.Id)
+                        </div>
+                        <div class="panel-body">
+                            Title: <b>@Html.DisplayFor(modelItem => item.Title) </b><br />
+                            Assigned To: <b>@Html.DisplayFor(modelItem => item.AssignedTo.Username) </b><br />
+                            <b>@Html.ActionLink("Details", "Ticket", "Space", new { id = item.Id, spacename = ViewBag.Space }, null)</b>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/dragula")
+    <script>
+        var first = '#Backlog';
+        var second = '#CurrentlyWorkingOn';
+        var third = '#Test';
+        var fourth = '#Completed';
+        var containers = [
+            document.querySelector(first),
+            document.querySelector(second),
+            document.querySelector(third),
+            document.querySelector(fourth)
+        ]
+        dragula({
+            containers: containers,
+            revertOnSpill: true,
+            direction: 'vertical'
+        })
+            .on('drop', function (el, target) {
+                var id = el.id;
+                var status = target.id;
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ id: el.id, status: target.id }),
+                    url: '@Url.Action("ChangeStatus", "Space")',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                });
+            });
+    </script>
+}

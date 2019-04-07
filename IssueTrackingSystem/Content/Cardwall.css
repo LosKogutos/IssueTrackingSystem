@@ -1,0 +1,50 @@
+﻿#Containers > div {
+    min-height: 70vh !important;
+    border-radius: 25px;
+    border: 2px solid #000000
+}
+
+#Backlog {
+    background-color: #ccdfff;
+}
+
+#CurrentlyWorkingOn {
+    background-color: #96bdff;
+}
+
+#Test {
+    background-color: #68a0ff;
+}
+
+#Completed {
+    background-color: #2676ff;
+}
+
+.panel {
+    border-radius: 25px !important;
+    margin-top: 15px;
+}
+
+.panel, .panel-body {
+    border-radius: 25px !important;
+}
+
+.panel-heading {
+    border-top-left-radius: 25px !important;
+    border-top-right-radius: 25px !important;
+}
+
+table {
+    border-collapse: separate;
+}
+
+#headers > thead > tr > th {
+    text-align: center;
+    font-size: larger;
+    border-radius: 25px;
+    border: 2px solid #000000;
+}
+
+.panel-heading {
+    font-weight: bold ;
+}

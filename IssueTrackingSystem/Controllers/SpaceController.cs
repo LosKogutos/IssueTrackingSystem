@@ -146,6 +146,33 @@ namespace IssueTrackingSystem.Controllers
             return RedirectToAction("Ticket", new { spacename = commentViewModel.Spacename, id = commentViewModel.TicketId });
         }
 
+        [HttpPost]
+        public ActionResult ChangeStatus(string id, string status)
+        {
+            int ticketId = Int32.Parse(id);
+            var ticket = _db.tickets
+                .Where(t => t.Id == ticketId).FirstOrDefault();
+            switch (status)
+            {
+                case "Backlog":
+                    ticket.Status = Status.Backlog;
+                    break;
+                case "CurrentlyWorkingOn":
+                    ticket.Status = Status.CurrentlyWorkingOn;
+                    break;
+                case "Test":
+                    ticket.Status = Status.Test;
+                    break;
+                case "Completed":
+                    ticket.Status = Status.Completed;
+                    break;
+                default:
+                    break;
+            }
+            _db.SaveChanges();
+            return Json(new { id=ticket.Id, status=ticket.Status} );
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (_db != null)

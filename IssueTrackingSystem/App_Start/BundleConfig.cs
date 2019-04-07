@@ -8,6 +8,10 @@ namespace IssueTrackingSystem
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.UseCdn = true;
+
+            bundles.Add(new ScriptBundle("~/bundles/dragula", "//cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/its").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery-ui-{version},js",
@@ -36,6 +40,15 @@ namespace IssueTrackingSystem
                       "~/Content/bootstrap*",
                       "~/Content/site.css",
                       "~/Content/jquery-ui*"));
+
+            bundles.Add(new StyleBundle("~/Content/dragula").Include(
+                "~/Content/dragula.min.css"));
+
+            bundles.Add(new StyleBundle("~/Content/cardwall").Include(
+                "~/Content/Cardwall.css",
+                "~/Content/dragula.min.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
