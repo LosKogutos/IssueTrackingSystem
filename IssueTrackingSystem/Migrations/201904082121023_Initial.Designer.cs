@@ -13,7 +13,7 @@ namespace IssueTrackingSystem.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201903270958492_Initial"; }
+            get { return "201904082121023_Initial"; }
         }
         
         string IMigrationMetadata.Source
