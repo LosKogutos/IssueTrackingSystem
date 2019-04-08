@@ -18,5 +18,15 @@ namespace IssueTrackingSystem.Models
         public DbSet<Ticket> tickets { get; set; }
         public DbSet<UserProfile> users { get; set; }
         public DbSet<Comment> Comments { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Ticket>()
+                .HasRequired(u => u.AssignedTo)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

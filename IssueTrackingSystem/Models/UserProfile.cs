@@ -11,14 +11,19 @@ namespace IssueTrackingSystem.Models
     public class UserProfile
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
-        public virtual ICollection<Ticket> Tickets { get; set; }
+
+        public virtual ICollection<Ticket> AssignedTickets { get; set; }
+        
+        public virtual ICollection<Ticket> CreatedTickets { get; set; }
+
         public virtual ICollection<Space> Spaces { get; set; } 
+
         public virtual ICollection<Comment> Comments { get; set; }
 
     }
