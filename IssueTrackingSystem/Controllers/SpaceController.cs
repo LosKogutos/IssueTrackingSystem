@@ -1,4 +1,5 @@
 ﻿using IssueTrackingSystem.Models;
+using IssueTrackingSystem.Services.Interfaces;
 using IssueTrackingSystem.Utils;
 using System;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace IssueTrackingSystem.Controllers
     public class SpaceController : Controller
     {
         private ITSDatabase _db = new ITSDatabase();
+        private readonly ISpaceService repo; 
+
+        public SpaceController(ISpaceService repository)
+        {
+            this.repo = repository;
+        }
+
         // GET: Space
         public ActionResult Index()
         {
