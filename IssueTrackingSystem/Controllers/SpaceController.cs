@@ -22,14 +22,8 @@ namespace IssueTrackingSystem.Controllers
 
         // GET: Space
         public ActionResult Index()
-        {
-            var spaces = _db.spaces
-                .Where(s => 
-                    s.Users.Any(u =>
-                        u.Id == WebSecurity.CurrentUserId))
-                .ToList();
-                
-            return View(spaces);
+        {                
+            return View(repo.GetSpacesForUser(WebSecurity.CurrentUserId));
         }
 
         // GET: Space/supportteam/Cardwall
@@ -41,48 +35,26 @@ namespace IssueTrackingSystem.Controllers
             }
 
             ViewBag.Space = spacename;
-            var tickets = _db.tickets
-                .Include("CreatedBy").Include("AssignedTo")
-                .Where(t => t.Space.Name == spacename).ToList();
-            return View(tickets);
+
+            return View(repo.GetTicketsBySpacename(spacename));
         }
 
         // GET: Space/supportteam/Ticket/8
         public ActionResult Ticket(string spacename, int id)
         {
-            var ticket = _db.tickets
-                .Include("CreatedBy").Include("AssignedTo").Include("Comments")
-                .Where(t => t.Id == id && t.Space.Name == spacename).Single();
-            var ticketViewModel = Mapper.MapEntityToTicketViewModel(ticket);
-
-            ticketViewModel.Users = _db.users
-                .Where(u =>
-                    u.Spaces.Any(s =>
-                        s.Name == spacename))
-                .ToList();
-
-            return View(ticketViewModel);
+            return View(repo.GetTicketViewModel(spacename,id));
         }
 
         // POST: Space/supportteam/Ticket/8?fieldname=status
         [HttpPost]
         public ActionResult Ticket(string spacename, string fieldname, TicketViewModel ticketViewModel)
         {
-            var ticket = _db.tickets
-                .Where(t => t.Id == ticketViewModel.Id).First();
-            switch (fieldname)
+            bool updatedSuccessfully = repo.UpdateTicketField(fieldname, ticketViewModel);
+            if (!updatedSuccessfully)
             {
-                case "status":
-                    ticket.Status = ticketViewModel.Status;
-                    break;
-                case "assignedto":
-                    ticket.AssignedTo = _db.users
-                        .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
-                    break;
-                default:
-                    return View("Error"); 
+                return View("Error");
             }
-            _db.SaveChanges();
+
             var dict = new RouteValueDictionary
             {
                 { "spacename", spacename }
@@ -93,17 +65,12 @@ namespace IssueTrackingSystem.Controllers
         // GET: Space/supportteam/AddTicket
         public ActionResult AddTicket(string spacename)
         {
-            var tvm = new TicketViewModel
-            {
-                Users = _db.users
-                    .Where(u =>
-                        u.Spaces.Any(s =>
-                            s.Name == spacename))
-                    .ToList()
-            };
-
             ViewBag.Spacename = spacename;
-            return View(tvm);
+
+            return View(new TicketViewModel
+            {
+                Users = repo.GetUsersWithAccessToSpace(spacename)
+            });
         }
         
         // POST: Space/supportteam/AddTicket
@@ -113,25 +80,14 @@ namespace IssueTrackingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                ticketViewModel.Space = _db.spaces
-                    .Where(s => s.Name == spacename).First();
-                ticketViewModel.AssignedTo = _db.users
-                    .Where(u => u.Id == ticketViewModel.SelectedAssignedTo).SingleOrDefault();
-                ticketViewModel.CreatedBy = _db.users
-                    .Where(u => u.Id == WebSecurity.CurrentUserId).SingleOrDefault();
-                ticketViewModel.CreatedDate = DateTime.Now;
-
-                var ticketEntity = Mapper.MapTicketViewModelToEntity(ticketViewModel);
-
-                try
+                var savedSuccessfully = repo.AddTicket(spacename, ticketViewModel);
+                if (savedSuccessfully)
                 {
-                    _db.tickets.Add(ticketEntity);
-                    _db.SaveChanges();
-                    return RedirectToAction("Cardwall", "Space",  new { spacename = spacename});
+                    return RedirectToAction("Cardwall", "Space", new { spacename = spacename });
                 }
-                catch 
+                else
                 {
-                    return RedirectToAction("Error"); 
+                    return RedirectToAction("Error");
                 }
             }
             return View(ticketViewModel);
@@ -141,44 +97,26 @@ namespace IssueTrackingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddComment(CommentViewModel commentViewModel)
         {
-            //save ticket to database 
-            Comment comment = Mapper.MapCommentViewModelToEntity(commentViewModel);
-            comment.CreatedBy = _db.users
-                    .Where(u => u.Id == WebSecurity.CurrentUserId).SingleOrDefault();
-            comment.Ticket = _db.tickets
-                    .Where(t => t.Id == commentViewModel.TicketId && t.Space.Name == commentViewModel.Spacename).SingleOrDefault();
-
-            _db.Comments.Add(comment);
-            _db.SaveChanges();
-
-            return RedirectToAction("Ticket", new { spacename = commentViewModel.Spacename, id = commentViewModel.TicketId });
+            if (ModelState.IsValid)
+            {
+                var savedSuccessfully = repo.AddComment(commentViewModel);
+                if (savedSuccessfully)
+                {
+                    return RedirectToAction("Ticket", new { spacename = commentViewModel.Spacename, id = commentViewModel.TicketId });
+                }
+                else
+                {
+                    return RedirectToAction("Error");
+                }
+            }
+            return View(commentViewModel);
         }
 
         [HttpPost]
         public ActionResult ChangeStatus(string id, string status)
         {
-            int ticketId = Int32.Parse(id);
-            var ticket = _db.tickets
-                .Where(t => t.Id == ticketId).FirstOrDefault();
-            switch (status)
-            {
-                case "Backlog":
-                    ticket.Status = Status.Backlog;
-                    break;
-                case "CurrentlyWorkingOn":
-                    ticket.Status = Status.CurrentlyWorkingOn;
-                    break;
-                case "Test":
-                    ticket.Status = Status.Test;
-                    break;
-                case "Completed":
-                    ticket.Status = Status.Completed;
-                    break;
-                default:
-                    break;
-            }
-            _db.SaveChanges();
-            return Json(new { id=ticket.Id, status=ticket.Status} );
+            bool updatedSuccessfully = repo.UpdateTicketStatus(id, status);
+            return Json(new { isStatusUpdated = updatedSuccessfully } );
         }
 
         protected override void Dispose(bool disposing)
