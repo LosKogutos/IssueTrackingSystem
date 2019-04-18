@@ -17,5 +17,6 @@ namespace IssueTrackingSystem.Services.Interfaces
         bool AddTicket(string spacename, TicketViewModel ticketViewModel);
         bool UpdateTicketStatus(string id, string status);
         bool AddComment(CommentViewModel commentViewModel);
+        List<Ticket> GetActiveTicketsByAssignedToId(int id);
     }
 }

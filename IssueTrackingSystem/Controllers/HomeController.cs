@@ -1,4 +1,5 @@
 ﻿using IssueTrackingSystem.Models;
+using IssueTrackingSystem.Services.Interfaces;
 using System.Linq;
 using System.Web.Mvc;
 using WebMatrix.WebData;
@@ -9,22 +10,23 @@ namespace IssueTrackingSystem.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        //todo: add DI/IC container for dbContext 
-        private ITSDatabase _db = new ITSDatabase();
+        private readonly ISpaceService repo;
+
+        public HomeController(ISpaceService repository)
+        {
+            this.repo = repository;
+        }
 
         public ActionResult Index()
         {
-            var userTickets =_db.tickets
-                .Include("Space")
-                .Where(t => t.AssignedTo.Id == WebSecurity.CurrentUserId && t.Status != Status.Completed)
-                .ToList();
+            var userTickets = repo.GetActiveTicketsByAssignedToId(WebSecurity.CurrentUserId);
 
             var spaces = userTickets
                 .Select(t => t.Space)
                 .Distinct()
                 .ToList();            
 
-            foreach(Space space in spaces)
+            foreach(var space in spaces)
             {
                 space.Tickets = userTickets
                     .Where(t => t.Space.Id == space.Id)
@@ -36,10 +38,6 @@ namespace IssueTrackingSystem.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
             base.Dispose(disposing);
         }
 

@@ -12,7 +12,6 @@ namespace IssueTrackingSystem.Controllers
     [Authorize]
     public class SpaceController : Controller
     {
-        private ITSDatabase _db = new ITSDatabase();
         private readonly ISpaceService repo; 
 
         public SpaceController(ISpaceService repository)
@@ -121,10 +120,6 @@ namespace IssueTrackingSystem.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

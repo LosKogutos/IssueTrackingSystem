@@ -38,6 +38,14 @@ namespace IssueTrackingSystem.Services
                 .Where(t => t.Space.Name == spacename).ToList();
         }
 
+        public List<Ticket> GetActiveTicketsByAssignedToId(int id)
+        {
+            return _db.tickets
+                .Include("Space")
+                .Where(t => t.AssignedTo.Id == id && t.Status != Status.Completed)
+                .ToList();
+        }
+
         public Ticket GetTicketById(int id)
         {
             return _db.tickets
@@ -161,7 +169,7 @@ namespace IssueTrackingSystem.Services
         {
             if(_db != null)
             {
-                ((IDisposable)_db).Dispose();
+                _db.Dispose();
             }
         }
     }
