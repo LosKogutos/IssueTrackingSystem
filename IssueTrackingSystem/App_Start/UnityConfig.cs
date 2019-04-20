@@ -13,6 +13,7 @@ namespace IssueTrackingSystem
 			var container = new UnityContainer();
 
             container.RegisterType<ISpaceService, SpaceService>();
+            container.RegisterType<IAdminService, AdminService>();
             
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

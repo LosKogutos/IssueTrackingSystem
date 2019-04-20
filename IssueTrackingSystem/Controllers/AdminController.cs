@@ -1,4 +1,5 @@
 ﻿using IssueTrackingSystem.Models;
+using IssueTrackingSystem.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +13,25 @@ namespace IssueTrackingSystem.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private ITSDatabase _db = new ITSDatabase();
+        private readonly IAdminService repo;
+
+        public AdminController(IAdminService repository)
+        {
+            this.repo = repository;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
-            return View(_db.spaces.ToList());
+            return View(repo.GetAllSpaces());
         }
 
         // GET: Admin/ManageSpace/1
         public ActionResult ManageSpace(int id)
         {
-            var users = _db.users
-                .Where(u =>
-                    u.Spaces.Any(s =>
-                        s.Id == id))
-                .ToList();
+            var users = repo.GetAllUsersForSpace(id);
 
-            ViewBag.Spacename = _db.spaces
-                .Where(s => s.Id == id)
-                .Select(s => s.Name).First();
+            ViewBag.Spacename = repo.GetSpaceById(id).Name;
 
             return View(users);
         }
@@ -39,32 +40,16 @@ namespace IssueTrackingSystem.Controllers
         [HttpPost]
         public ActionResult RemoveAccessForUser(int id, string spacename)
         {
-            int IdSpaceAffected=0;
-            var userWithSpaces = _db.users
-                .Include("Spaces")
-                .Where(u => u.Id == id)
-                .SingleOrDefault();
+            var user = repo.GetUserById(id);
+            var space = repo.GetSpaceByName(spacename);
 
-            if (userWithSpaces != null)
-            {
-                foreach(var space in userWithSpaces.Spaces
-                    .Where(s => s.Name.Equals(spacename)).ToList())
-                {
-                    IdSpaceAffected = space.Id;
-                    userWithSpaces.Spaces.Remove(space);
-                }
-            }
+            bool isRemovedSuccessfully = repo.RemoveUserFromSpace(user, space);
 
-            try
+            if (isRemovedSuccessfully)
             {
-                _db.SaveChanges();
-                if (IdSpaceAffected == 0)
-                {
-                    return View("Error");
-                }
-                else return RedirectToAction("ManageSpace", new { id = IdSpaceAffected });
+                return RedirectToAction("ManageSpace", new { id = space.Id });
             }
-            catch
+            else
             {
                 return View("Error");
             }
@@ -73,15 +58,9 @@ namespace IssueTrackingSystem.Controllers
         // GET: Admin/AddAccessForUser?spacename=test
         public ActionResult AddAccessForUser(string spacename)
         {
-            var users = _db.users
-                .Where(u =>
-                    u.Spaces.All(s =>
-                        s.Name != spacename))
-                .ToList();
+            var users = repo.GetAllUsersWithoutAccessToSpace(spacename);
 
-            ViewBag.Spacename = _db.spaces
-                .Where(s => s.Name == spacename)
-                .Select(s => s.Name).First();
+            ViewBag.Spacename = repo.GetSpaceByName(spacename).Name;
 
             return View(users);
         }
@@ -90,19 +69,15 @@ namespace IssueTrackingSystem.Controllers
         [HttpPost]
         public ActionResult AddAccessForUser(int id, string spacename)
         {
-            var space = _db.spaces
-                .Where(s => s.Name == spacename).First();
-            var user = _db.users
-                .Where(u => u.Id == id).First();
+            var space = repo.GetSpaceByName(spacename);
+            var user = repo.GetUserById(id);
 
-            space.Users.Add(user);
-            user.Spaces.Add(space);
-            try
+            var isAddedSuccessfully = repo.AddUserToSpace(user, space);
+            if (isAddedSuccessfully)
             {
-                _db.SaveChanges();
                 return RedirectToAction("ManageSpace", new { id = space.Id });
             }
-            catch
+            else
             {
                 return View("Error");
             }            
@@ -148,13 +123,12 @@ namespace IssueTrackingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateSpace(Space space)
         {
-            try
-            {
-                _db.spaces.Add(space);
-                _db.SaveChanges();
+            var isCreatedSuccessfully = repo.CreateSpace(space);
+            if (isCreatedSuccessfully)
+            { 
                 return RedirectToAction("Index");
             }
-            catch
+            else
             {
                 return View("Error");
             }
@@ -162,10 +136,6 @@ namespace IssueTrackingSystem.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (_db != null)
-            {
-                _db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }
