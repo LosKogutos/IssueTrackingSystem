@@ -48,6 +48,12 @@ namespace IssueTrackingSystem
                 "~/Content/Cardwall.css",
                 "~/Content/dragula.min.css"));
 
+            bundles.Add(new StyleBundle("~/Content/login").Include(
+                "~/Content/Login.css"));
+
+            bundles.Add(new StyleBundle("~/Content/index").Include(
+                "~/Content/Index.css"));
+
             BundleTable.EnableOptimizations = true;
         }
     }

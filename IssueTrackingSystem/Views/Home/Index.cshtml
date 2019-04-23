@@ -3,38 +3,66 @@
 @{
     ViewBag.Title = "Index";
 }
-<h1>Welcome @User.Identity.Name !</h1>
-<h2>My Tickets</h2>
 
-<table class="table">
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            <table class="table">
-                <tr>
-                    <th>Title</th>
-                    <th>Due date</th>
-                </tr>
-                @foreach (var ticket in item.Tickets)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => ticket.Title) </td>
-                        <td>@Html.DisplayFor(modelItem => ticket.Eta)</td>
-                        @{ 
-                            var dict = new RouteValueDictionary();
-                            dict.Add("id", ticket.Id);
-                            dict.Add("spacename", ticket.Space.Name);
-                        }
-                        <td>@Html.ActionLink("Details", "Ticket", "Space", dict, null)</td>
-                    </tr>
-                }
-            </table>
-        </td>
-    </tr>
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
 }
 
-</table>
+<h1>Welcome <b>@User.Identity.Name</b> !</h1>
+<br /><br />
+
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h3 class="panel-title">My Tickets</h3>
+        </div>
+        <table class="table">
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="panel panel-success filterable">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">@Html.DisplayFor(modelItem => item.Name)</h3>
+                            </div>
+                        </div>
+                        <table class="table tickets">
+                            <thead>
+                                <tr class="filters">
+                                    <th><input type="text" class="form-control" placeholder="Title" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Due date (ETA)" disabled></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ticket in item.Tickets)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => ticket.Title) </td>
+                                        <td>@Html.DisplayFor(modelItem => ticket.Eta)</td>
+                                        @{
+                                            var dict = new RouteValueDictionary();
+                                            dict.Add("id", ticket.Id);
+                                            dict.Add("spacename", ticket.Space.Name);
+                                        }
+                                        <td>
+                                            <button class="btn btn-success" onclick="location.href='@Url.Action("Ticket", "Space", dict)'">
+                                                <span class="glyphicon glyphicon-search"> Details</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script>
+
+    </script>
+}

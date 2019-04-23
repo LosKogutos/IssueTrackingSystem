@@ -4,43 +4,58 @@
     ViewBag.Title = "Log in";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<section id="loginForm">
-<h2>Use a local account to log in.</h2>
-@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
-    </fieldset>
-    <p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
-    </p>
+@section Cardwall {
+    <link href="@Href("~/Content/login")" rel="stylesheet" type="text/css" />
 }
+
+
+    <div class="container">
+        <div class="row main">
+            <div class="panel-heading">
+                <div class="panel-title text-center">
+                    <h1 class="title"><b>ITS Login</b></h1>
+                    <hr />
+                </div>
+            </div>
+            <div class="main-login main-center">
+                @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        <label for="username" class="cols-sm-2 control-label">Username</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your Username" />
+                                @Html.ValidationMessageFor(m => m.UserName)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="cols-sm-2 control-label">Password</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password" />
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <input type="submit" class="btn btn-primary btn-lg btn-block login-button" value="Sign In"/>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
 </section>
 
 
 @section Scripts {
-   
+
 }
