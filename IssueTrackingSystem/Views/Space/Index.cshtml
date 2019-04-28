@@ -1,28 +1,38 @@
 ﻿@model IEnumerable<IssueTrackingSystem.Models.Space>
 
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>My Spaces</h2>
+<h1><b>List of my Spaces</b></h1>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Open", "Cardwall", new { spaceName = item.Name }) 
-        </td>
-    </tr>
-}
-
-</table>
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">My Spaces</h1>
+        </div>
+        <table class="table">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-success" onclick="location.href='@Url.Action("Cardwall", "Space", new { spaceName = item.Name })'">
+                                <span class="glyphicon glyphicon-search"> Details</span>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

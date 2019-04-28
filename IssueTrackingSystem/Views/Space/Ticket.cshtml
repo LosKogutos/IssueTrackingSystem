@@ -1,155 +1,168 @@
 ﻿@using IssueTrackingSystem.Models
 @model TicketViewModel
 
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewBag.Title = "Ticket";
     var dict = new RouteValueDictionary();
     dict.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
 }
-<h2>Ticket # @Html.DisplayFor(moodel => Model.Id)</h2>
+
+<h1><b>Ticket # @Html.DisplayFor(moodel => Model.Id)</b></h1>
 
 <div class="col-md-3 text-left">
-    <hr />
-    <dl class="dl-horizontal">
-        @*created by*@
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-
-        <dd id="createdby">
-            @Html.DisplayFor(model => model.CreatedBy.Username)
-        </dd>
-
-        @*assigned to*@
-        <dt>
-            @Html.DisplayNameFor(model => model.AssignedTo)
-        </dt>
-
-        <dd id="assignedto">
-            @Html.DisplayFor(model => model.AssignedTo.Username)
-        </dd>
-
-        <dd>
-            <input id="assignedto-edit" onclick="ToggleInputFor('assignedto')" type="button" value="Edit" />
-        </dd>
-
-        <dd id="assignedto-input" style="display:none">
-            @{
-                var dictAssignedTo = new RouteValueDictionary();
-                dictAssignedTo.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
-                dictAssignedTo.Add("fieldname", "assignedto");
-            }
-            @using (Html.BeginForm("Ticket", "Space", dictAssignedTo, FormMethod.Post, null))
-            {
-                @*@Html.EditorFor(model => model.AssignedTo)*@
-                @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Username"), "- Please Select -")
-                <input type="submit" value="Update" class="btn btn-default" />
-            }
-        </dd>
-
-        @*eta*@
-        <dt>
-            @Html.DisplayNameFor(model => model.Eta)
-        </dt>
-
-        <dd id="eta">
-            @Html.DisplayFor(model => model.Eta)
-        </dd>
-
-        @*created date*@
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd id="createddate">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        @* status *@
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd id="status">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dd>
-            <input id="status-edit" onclick="ToggleInputFor('status')" type="button" value="Edit" />
-        </dd>
-
-        <dd id="status-input" style="display:none">
-            @{
-                var dictStatus = new RouteValueDictionary();
-                dictStatus.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
-                dictStatus.Add("fieldname", "status");
-            }
-            @using (Html.BeginForm("Ticket", "Space", dictStatus, FormMethod.Post, null))
-            {
-                @Html.EditorFor(model => model.Status)
-                <input type="submit" value="Update" class="btn btn-default" />
-            }
-        </dd>
-    </dl>
-    <p>
-        @{var dictionary = new RouteValueDictionary();
-            dictionary.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
-        }
-        @Html.ActionLink("Back", "Cardwall", "Space", dictionary, null);
-    </p>
-</div>
-<div class="col-md-9 text-center">
-    <dl class="dl-horizontal">
-        @*title*@
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd id="title">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        @*description*@
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd id="descirption">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-    <div id="commentsSection">
-        <h2>Comments Section</h2>
-        @foreach(var comment in Model.Comments)
-        {
-            <div id="comment">
-                @comment.CreatedBy.Username
-                @comment.CreatedDate
-                @Html.Label("commentText", comment.Text)
+    <div class="row">
+        <div class="panel panel-primary filterable">
+            <div class="panel-heading">
+                <h1 class="panel-title">My Spaces</h1>
             </div>
-        }
-        <div id="newComment">
-            @{ 
-                var viewmodel = new CommentViewModel
-                {
-                    Spacename = this.ViewContext.RouteData.Values["spacename"].ToString(),
-                    TicketId = Model.Id
-                };
-            }
-            @Html.Partial("_AddComment", viewmodel)
+            <dl class="dl-horizontal">
+                @*created by*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </dt>
+
+                <dd id="createdby">
+                    @Html.DisplayFor(model => model.CreatedBy.Username)
+                </dd>
+
+                @*assigned to*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.AssignedTo)
+                </dt>
+
+                <dd id="assignedto">
+                    @Html.DisplayFor(model => model.AssignedTo.Username)
+                    <input id="assignedto-edit" onclick="ToggleInputFor('assignedto')" type="button" value="Edit" />
+                </dd>
+
+                @*<dd>
+                    <input id="assignedto-edit" onclick="ToggleInputFor('assignedto')" type="button" value="Edit" />
+                </dd>*@
+
+                <dd id="assignedto-input" style="display:none">
+                    @{
+                        var dictAssignedTo = new RouteValueDictionary();
+                        dictAssignedTo.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+                        dictAssignedTo.Add("fieldname", "assignedto");
+                    }
+                    @using (Html.BeginForm("Ticket", "Space", dictAssignedTo, FormMethod.Post, null))
+                    {
+                        @*@Html.EditorFor(model => model.AssignedTo)*@
+                        @Html.DropDownListFor(model => model.SelectedAssignedTo, new SelectList(Model.Users, "Id", "Username"), "- Please Select -")
+                        <input type="submit" value="Update" class="btn btn-default" />
+                    }
+                </dd>
+
+                @*eta*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.Eta)
+                </dt>
+
+                <dd id="eta">
+                    @Html.DisplayFor(model => model.Eta)
+                </dd>
+
+                @*created date*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </dt>
+
+                <dd id="createddate">
+                    @Html.DisplayFor(model => model.CreatedDate)
+                </dd>
+
+                @* status *@
+                <dt>
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+
+                <dd id="status">
+                    @Html.DisplayFor(model => model.Status)
+                </dd>
+
+                <dd>
+                    <input id="status-edit" onclick="ToggleInputFor('status')" type="button" value="Edit" />
+                </dd>
+
+                <dd id="status-input" style="display:none">
+                    @{
+                        var dictStatus = new RouteValueDictionary();
+                        dictStatus.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+                        dictStatus.Add("fieldname", "status");
+                    }
+                    @using (Html.BeginForm("Ticket", "Space", dictStatus, FormMethod.Post, null))
+                    {
+                        @Html.EditorFor(model => model.Status)
+                        <input type="submit" value="Update" class="btn btn-default" />
+                    }
+                </dd>
+            </dl>
+            <p>
+                @{var dictionary = new RouteValueDictionary();
+                    dictionary.Add("spacename", this.ViewContext.RouteData.Values["spacename"].ToString());
+                }
+                @Html.ActionLink("Back", "Cardwall", "Space", dictionary, null)
+            </p>
         </div>
     </div>
 </div>
-<script>
-    function ToggleInputFor(field) {
-        var element = $('#' + field + '-input');
-        var display = element.css("display");
-        
-        if (display == "none") {
-            element.attr("style", "display:inline");
-        }
-        else if (display == "inline") {
-            element.attr("style", "display:none");
-        }
-    }
-</script>
+
+        <div class="col-md-9 text-center">
+            <dl class="dl-horizontal">
+                @*title*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+
+                <dd id="title">
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+
+                @*description*@
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd id="descirption">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+            </dl>
+            <div id="commentsSection">
+                <h2>Comments Section</h2>
+                @foreach (var comment in Model.Comments)
+                {
+                    <div id="comment">
+                        @comment.CreatedBy.Username
+                        @comment.CreatedDate
+                        @Html.Label("commentText", comment.Text)
+                    </div>
+                }
+                <div id="newComment">
+                    @{
+                        var viewmodel = new CommentViewModel
+                        {
+                            Spacename = this.ViewContext.RouteData.Values["spacename"].ToString(),
+                            TicketId = Model.Id
+                        };
+                    }
+                    @Html.Partial("_AddComment", viewmodel)
+                </div>
+            </div>
+        </div>
+        <script>
+            function ToggleInputFor(field) {
+                var element = $('#' + field + '-input');
+                var display = element.css("display");
+
+                if (display == "none") {
+                    element.attr("style", "display:inline");
+                }
+                else if (display == "inline") {
+                    element.attr("style", "display:none");
+                }
+            }
+        </script>

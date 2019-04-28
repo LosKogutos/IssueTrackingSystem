@@ -31,3 +31,20 @@ td {
     margin: 50px;
 }
 
+#create-space, #create-user, #creatediv {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+#add-user {
+    margin: 30px;
+}
+
+.form-horizontal {
+    margin-top: 15px;
+}
+
+dl dt {
+    margin-left: 0px;
+    display: inline;
+}

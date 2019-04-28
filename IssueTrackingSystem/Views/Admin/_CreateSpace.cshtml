@@ -1,15 +1,11 @@
 ﻿@model IssueTrackingSystem.Models.Space
 
-@*@using (Html.BeginForm("RemoveAccessForUser", "Admin", new { id = item.Id, spacename = ViewBag.Spacename }, FormMethod.Post, null))
-{
-    <input type="submit" value="Remove user from Space" class="btn btn-default" />
-}*@
-@using (Html.BeginForm())
+@using (Ajax.BeginForm("CreateSpace", "Admin", new AjaxOptions { HttpMethod="POST"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>New Space</h4>
+        <h2><b>New Space</b></h2>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -22,13 +18,11 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create Space" class="btn btn-default" />
+                <input type="submit" value="Create Space" class="btn btn-success" />
             </div>
         </div>
     </div>
 }
-
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

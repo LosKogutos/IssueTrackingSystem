@@ -43,6 +43,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             @if (User.IsInRole("Admin"))
                             {
+                                <li><a href="#">You are authenticated as: @User.Identity.Name</a></li>
                                 <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
                             }
                             <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>

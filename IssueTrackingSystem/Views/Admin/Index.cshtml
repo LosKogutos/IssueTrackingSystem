@@ -1,38 +1,58 @@
 ﻿@model IEnumerable<IssueTrackingSystem.Models.Space>
 
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewBag.Title = "List of Spaces";
 }
-<br/>
-<div style="border">
-    <h3>Additional options</h3>
-    <p>
-        <input id="create-user" onclick="Render('user')" type="button" value="Create New User" />
-    </p>
-    <p>
-        <input id="create-space" onclick="Render('space')" type="button" value="Create New Space" />
-    </p>
-    <div id="creatediv">
 
+<h1><b>Admin Panel</b></h1>
+
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">Additional options</h1>
+        </div>
+        <button id="create-user" class="btn btn-success" onclick="Render('user')">
+            <span class="glyphicon glyphicon-plus"> </span> Create new User
+        </button>
+        <button id="create-space" class="btn btn-success" onclick="Render('space')">
+            <span class="glyphicon glyphicon-plus"> </span> Create new Space
+        </button>
+        <div id="creatediv">
+
+        </div>
     </div>
 </div>
 
-
-<h2>List of all Spaces</h2>
-<table class="table">
-    
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "ManageSpace", new { id=item.Id }) 
-        </td>
-    </tr>
-}
-</table>
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">List of all Spaces</h1>
+        </div>
+        <table class="table">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-success" onclick="location.href='@Url.Action("ManageSpace", "Admin", new { id = item.Id })'">
+                                <span class="glyphicon glyphicon-search"> </span> Details
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 <script>
     function Render(field) {
         if (field == 'user') {

@@ -1,57 +1,81 @@
 ﻿@model IEnumerable<IssueTrackingSystem.Models.UserProfile>
 
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewBag.Title = "ManageSpace";
 }
 
-<h2>Manage @ViewBag.Spacename</h2>
+<h1><b>Manage @ViewBag.Spacename</b></h1>
 
-<h3>List of users with access to this space</h3>
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">Additional options</h1>
+        </div>
+        <button id="add-user" class="btn btn-success" onclick="location.href='@Url.Action("AddAccessForUser", "Admin", new { spacename = ViewBag.Spacename })'">
+            <span class="glyphicon glyphicon-plus"></span> Add user too Space
+        </button>
+    </div>
+</div>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lastname)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">List of users with access to @ViewBag.Spacename</h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lastname)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lastname)
-            </td>
-            <td>
-                @using (Html.BeginForm("RemoveAccessForUser", "Admin", new { id = item.Id, spacename = ViewBag.Spacename }, FormMethod.Post, null))
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <input type="submit" value="Remove user from Space" class="btn btn-default" />
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lastname)
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("RemoveAccessForUser", "Admin", new { id = item.Id, spacename = ViewBag.Spacename }, FormMethod.Post, null))
+                            {
+                                <button class="btn btn-success">
+                                    <span class="glyphicon glyphicon-remove"></span> Remove user from space
+                                </button>
+                            }
+                        </td>
+                    </tr>
                 }
-            </td>
-        </tr>
-    }
 
-</table>
-<br />
+        </table>
+        <br />
+    </div>
+</div>
 
-    @Html.ActionLink("Add new user to Space", "AddAccessForUser", new { spacename = ViewBag.Spacename })
 
 

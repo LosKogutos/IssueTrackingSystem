@@ -1,49 +1,64 @@
 ﻿@model IEnumerable<IssueTrackingSystem.Models.UserProfile>
 
+@section Cardwall {
+    <link href="@Href("~/Content/index")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewBag.Title = "AddAccessForUser";
 }
 
-<h2>List of users that can be added to space @ViewBag.Spacename</h2>
+<h1><b>Manage @ViewBag.Spacename</b></h1>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lastname)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="panel panel-primary filterable">
+        <div class="panel-heading">
+            <h1 class="panel-title">List of users that can be added to @ViewBag.Spacename</h1>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lastname)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Username)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lastname)
-        </td>
-        <td>
-            @using (Html.BeginForm("AddAccessForUser", "Admin", new { id = item.Id, spacename = ViewBag.Spacename }, FormMethod.Post, null))
+            @foreach (var item in Model)
             {
-                <input type="submit" value="Add user to Space" class="btn btn-default" />
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Lastname)
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("AddAccessForUser", "Admin", new { id = item.Id, spacename = ViewBag.Spacename }, FormMethod.Post, null))
+                        {
+                            <button class="btn btn-success">
+                                <span class="glyphicon glyphicon-plus"> Add user</span>
+                            </button>
+                        }
+                    </td>
+                </tr>
             }
-        </td>
-    </tr>
-}
-
-</table>
+        </table>
+    </div>
+</div>

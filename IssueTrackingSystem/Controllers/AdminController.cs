@@ -112,26 +112,31 @@ namespace IssueTrackingSystem.Controllers
                 catch (MembershipCreateUserException e)
                 {
                     ViewBag.ErrorMessage = "Unable to register user because of " + e.Message;
-                    return View("_CreateUser", model);
+                    return View("Index", model);
                 }
             }
             ViewBag.ErrorMessage = "Unable to Register User";
-            return View("_CreateUser", model);
+            return View("Index",model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateSpace(Space space)
         {
-            var isCreatedSuccessfully = repo.CreateSpace(space);
-            if (isCreatedSuccessfully)
-            { 
-                return RedirectToAction("Index");
-            }
-            else
+            if (ModelState.IsValid)
             {
-                return View("Error");
+                var isCreatedSuccessfully = repo.CreateSpace(space);
+                if (isCreatedSuccessfully)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("Error");
+                } 
             }
+            ViewBag.ErrorMessage = "Unable to Create Space";
+            return View("Index", space);
         }
 
         protected override void Dispose(bool disposing)
