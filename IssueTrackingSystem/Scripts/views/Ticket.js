@@ -1,26 +1,25 @@
 ﻿$(document).ready(function () {
-    $(function () {
-        $("#CreatedBy_Username").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: '../FetchUsers',
-                    dataType: 'json',
-                    data: {
-                        q: request.term
-                    },
-                    success: function (data) {
-                        response(data);
-                    }
-                });
-            },
-            minLength: 3,
-            open: function () {
-                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-            },
-            close: function () {
-                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-            }
-        });
+    $("#Eta").datepicker({ dateFormat: 'dd M yy' });
+    $("#CreatedBy_Username").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '../FetchUsers',
+                dataType: 'json',
+                data: {
+                    q: request.term
+                },
+                success: function (data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 3,
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
     });
 });
 

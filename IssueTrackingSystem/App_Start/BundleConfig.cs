@@ -42,7 +42,7 @@ namespace IssueTrackingSystem
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap*",
                       "~/Content/site.css",
-                      "~/Content/jquery-ui*"));
+                      "~/Content/jquery-ui*").IncludeDirectory("~/Content/themes/base", "*.css", true));
 
             bundles.Add(new StyleBundle("~/Content/dragula").Include(
                 "~/Content/dragula.min.css"));
@@ -57,7 +57,7 @@ namespace IssueTrackingSystem
             bundles.Add(new StyleBundle("~/Content/index").Include(
                 "~/Content/Index.css"));
 
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
