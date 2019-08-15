@@ -14,7 +14,7 @@ namespace IssueTrackingSystem
 
             bundles.Add(new ScriptBundle("~/bundles/its").Include(
                 "~/Scripts/jquery-{version}.js",
-                "~/Scripts/jquery-ui-{version},js",
+                "~/Scripts/jquery-ui-{version}.js",
                 "~/Scripts/jquery.unobtrusive*",
                 "~/Scripts/jquery.validate*",
                 "~/Scripts/bootstrap*"));
@@ -36,6 +36,9 @@ namespace IssueTrackingSystem
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/ticket").Include(
+                      "~/Scripts/views/Ticket.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap*",
                       "~/Content/site.css",
@@ -54,7 +57,7 @@ namespace IssueTrackingSystem
             bundles.Add(new StyleBundle("~/Content/index").Include(
                 "~/Content/Index.css"));
 
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
         }
     }
 }

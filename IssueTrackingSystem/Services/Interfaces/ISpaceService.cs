@@ -13,7 +13,7 @@ namespace IssueTrackingSystem.Services.Interfaces
         Ticket GetTicketById(int id);
         List<UserProfile> GetUsersWithAccessToSpace(string spacename);
         TicketViewModel GetTicketViewModel(string spacename, int id);
-        bool UpdateTicketField(string fieldName, TicketViewModel value);
+        bool UpdateTicket(TicketViewModel vm);
         bool AddTicket(string spacename, TicketViewModel ticketViewModel);
         bool UpdateTicketStatus(string id, string status);
         bool AddComment(CommentViewModel commentViewModel);

@@ -22,8 +22,10 @@ namespace IssueTrackingSystem.Models
         public string Description { get; set; }
         public UserProfile CreatedBy { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? Eta { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime Eta { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime CreatedDate { get; set; }
         public Space Space { get; set; }
 

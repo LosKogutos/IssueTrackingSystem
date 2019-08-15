@@ -297,6 +297,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\views\Ticket.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -313,7 +314,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Space\Index.cshtml" />
     <Content Include="Views\Space\Cardwall.cshtml" />
-    <Content Include="Views\Space\Ticket.cshtml" />
     <Content Include="Views\Space\AddTicket.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
@@ -323,6 +323,7 @@
     <Content Include="Views\Admin\_CreateSpace.cshtml" />
     <Content Include="Views\Admin\_CreateUser.cshtml" />
     <Content Include="Views\Space\_AddComment.cshtml" />
+    <Content Include="Views\Space\Ticket.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

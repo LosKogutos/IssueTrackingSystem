@@ -44,21 +44,16 @@ namespace IssueTrackingSystem.Controllers
             return View(repo.GetTicketViewModel(spacename,id));
         }
 
-        // POST: Space/supportteam/Ticket/8?fieldname=status
         [HttpPost]
-        public ActionResult Ticket(string spacename, string fieldname, TicketViewModel ticketViewModel)
+        public JsonResult FetchUsers(string q)
         {
-            bool updatedSuccessfully = repo.UpdateTicketField(fieldname, ticketViewModel);
-            if (!updatedSuccessfully)
-            {
-                return View("Error");
-            }
+            return Json(new { username = "mkogut" });
+        }
 
-            var dict = new RouteValueDictionary
-            {
-                { "spacename", spacename }
-            };
-            return RedirectToAction("Cardwall", dict);
+        [HttpPost]
+        public JsonResult UpdateTicket(TicketViewModel vm)
+        {
+            return Json(new { isSuccess = repo.UpdateTicket(vm) });
         }
 
         // GET: Space/supportteam/AddTicket

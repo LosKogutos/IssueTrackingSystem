@@ -35,7 +35,7 @@ namespace IssueTrackingSystem.Utils
                 AssignedTo = entity.AssignedTo,
                 CreatedBy = entity.CreatedBy,
                 CreatedDate = entity.CreatedDate,
-                Eta = entity.Eta,
+                Eta = (DateTime)entity.Eta,
                 Status = entity.Status,
                 Comments = entity.Comments.ToList()
             };

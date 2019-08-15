@@ -63,28 +63,19 @@ namespace IssueTrackingSystem.Services
             return ticketViewModel;
         }
 
-        public bool UpdateTicketField(string fieldName, TicketViewModel value)
+        public bool UpdateTicket(TicketViewModel vm)
         {
-            var ticket = _db.tickets
-               .Where(t => t.Id == value.Id).First();
-            switch (fieldName)
+            var createdBy = _db.users.Where(u => u.Username.Equals(vm.AssignedTo.Username)).Select(u => u.Id).FirstOrDefault();
+            if (createdBy != 0)
             {
-                case "status":
-                    ticket.Status = value.Status;
-                    break;
-                case "assignedto":
-                    ticket.AssignedTo = _db.users
-                        .Where(u => u.Id == value.SelectedAssignedTo).SingleOrDefault();
-                    break;
-                default:
-                    return false;
-            }
-            try
-            {
+                var ticketEntity = _db.tickets.Where(t => t.Id == vm.Id).FirstOrDefault();
+                ticketEntity.AssignedTo_Id = createdBy;
+                ticketEntity.Eta = vm.Eta;
+                ticketEntity.Description = vm.Description;
                 _db.SaveChanges();
                 return true;
             }
-            catch
+            else
             {
                 return false;
             }

@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Eta, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2">Target Date</label>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Eta, new { htmlAttributes = new { @class = "datepicker form-control", @type = "date" } })
                         @Html.ValidationMessageFor(model => model.Eta, "", new { @class = "text-danger" })
@@ -64,7 +64,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-success" />
+                        <input type="submit" value="Create" style="margin-top:20px" class="btn btn-success" />
                     </div>
                 </div>
             </div>
