@@ -57,7 +57,7 @@ namespace IssueTrackingSystem
             bundles.Add(new StyleBundle("~/Content/index").Include(
                 "~/Content/Index.css"));
 
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
